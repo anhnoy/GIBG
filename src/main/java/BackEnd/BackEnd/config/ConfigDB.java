@@ -12,3 +12,4 @@ public class ConfigDB {
         return DriverManager.getConnection(url, username, password);
     }
 }
+//jiujhuhuihuih
