@@ -17,24 +17,24 @@ public class UsersException extends BaseException {
   }
   public static UsersException phoneBlank() {
 
-    return new UsersException("phone.blank");
+    return new UsersException("no have phone");
 
   }
   public static UsersException emailBlank() {
 
-    return new UsersException("email.blank");
+    return new UsersException("no have email");
 
   }
 
   public static UsersException firstnameBlank() {
 
-    return new UsersException("firstname.blank");
+    return new UsersException("no have firstname");
 
   }
 
   public static UsersException lastnameBlank() {
 
-    return new UsersException("lastname.blank");
+    return new UsersException("no have lastname");
 
   }
 
