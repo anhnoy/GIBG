@@ -6,9 +6,9 @@ import java.sql.SQLException;
 
 public class ConfigDB {
     public static Connection db() throws SQLException {
-        String url = "jdbc:mysql://localhost:3303/crud";
+        String url = "jdbc:mysql://localhost:3306/backend";
         String username = "root";
-        String password = "pass4142";
+        String password = "";
         return DriverManager.getConnection(url, username, password);
     }
 }
