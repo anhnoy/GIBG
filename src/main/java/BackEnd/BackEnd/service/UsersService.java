@@ -77,7 +77,7 @@ public class UsersService {
         Map<String, Object> map = new HashMap<>();
         String token = "";
         try(Connection conn = ConfigDB.db()){
-            String phone = req.get("phone").toString();
+            String phone = req.get("user").toString();
             String password = req.get("password").toString();
             if (phone.isBlank()){
                 throw UsersException.phoneBlank();
