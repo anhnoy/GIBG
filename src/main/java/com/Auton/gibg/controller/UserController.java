@@ -19,7 +19,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/users")
-
 public class UserController {
 
     @Autowired
@@ -49,15 +48,42 @@ public class UserController {
     }
 
 
-    @PostMapping("/register")
-    public ResponseEntity<UserResponse> createUser(@RequestBody User user) {
+    @PostMapping("/admin")
+    public ResponseEntity<UserResponse> createAdmin(@RequestBody User user) {
         try {
+            user.setRole("ADMIN"); // กำหนดค่า role เป็น "ADMIN" สำหรับผู้ใช้ที่สร้างใหม่
             User savedUser = userService.createUser(user);
             return ResponseEntity.status(HttpStatus.CREATED)
-                    .body(new UserResponse("User saved successfully", savedUser));
+                    .body(new UserResponse("ADMIN saved successfully", savedUser));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new UserResponse("Failed to save user: " + e.getMessage(), null));
+                    .body(new UserResponse("Failed to save ADMIN: " + e.getMessage(), null));
+        }
+    }
+
+    @PostMapping("/employee")
+    public ResponseEntity<UserResponse> createEmployee(@RequestBody User user) {
+        try {
+            user.setRole("EMPLOYEE"); // กำหนดค่า role เป็น "EMPLOYEE" สำหรับผู้ใช้ที่สร้างใหม่
+            User savedUser = userService.createUser(user);
+            return ResponseEntity.status(HttpStatus.CREATED)
+                    .body(new UserResponse("EMPLOYEE saved successfully", savedUser));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new UserResponse("Failed to save EMPLOYEE: " + e.getMessage(), null));
+        }
+    }
+
+    @PostMapping("/customer")
+    public ResponseEntity<UserResponse> createCustomer(@RequestBody User user) {
+        try {
+            user.setRole("CUSTOMER"); // กำหนดค่า role เป็น "CUSTOMER" สำหรับผู้ใช้ที่สร้างใหม่
+            User savedUser = userService.createUser(user);
+            return ResponseEntity.status(HttpStatus.CREATED)
+                    .body(new UserResponse("CUSTOMER saved successfully", savedUser));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new UserResponse("Failed to save CUSTOMER: " + e.getMessage(), null));
         }
     }
 

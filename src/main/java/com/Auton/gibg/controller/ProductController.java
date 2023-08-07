@@ -31,7 +31,7 @@ public class ProductController {
     }
 
 
-    @GetMapping
+    @GetMapping("/get_all")
     public ResponseEntity<Map<String, List<Product>>> getAllProducts() {
         try {
             List<Product> products = productRepository.findAll();
@@ -53,7 +53,7 @@ public class ProductController {
         }
     }
 
-    @PostMapping("")
+    @PostMapping("create")
     public ResponseEntity<Product> createProduct(@Validated @RequestBody Product product, BindingResult bindingResult) {
         try {
             // check validation errors
@@ -76,7 +76,7 @@ public class ProductController {
         }
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/update{id}")
     public ResponseEntity<Product> updateProduct(@PathVariable Long id, @RequestBody Product product) {
         Optional<Product> oldProduct = productRepository.findById(id);
         if (oldProduct.isPresent()) {
@@ -92,7 +92,7 @@ public class ProductController {
         }
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/delete{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         Optional<Product> product = productRepository.findById(id);
         if (product.isPresent()) {
