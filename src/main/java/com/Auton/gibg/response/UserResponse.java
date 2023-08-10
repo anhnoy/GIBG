@@ -11,7 +11,7 @@ import lombok.*;
 public class UserResponse {
 
     private String message;
-    private User user;
+    private UserDto user;
 
 }
 

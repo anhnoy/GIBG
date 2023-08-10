@@ -3,15 +3,15 @@ package com.Auton.gibg.controller;
 
 import com.Auton.gibg.entity.User;
 import com.Auton.gibg.repository.UserRepository;
-import com.Auton.gibg.response.JwtResponse;
-import com.Auton.gibg.response.LoginRequest;
-import com.Auton.gibg.response.UserListResponse;
-import com.Auton.gibg.response.UserResponse;
+import com.Auton.gibg.response.*;
+import com.Auton.gibg.role.Role;
 import com.Auton.gibg.service.UserService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.oauth2.resource.OAuth2ResourceServerProperties;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collections;
@@ -49,12 +49,32 @@ public class UserController {
 
 
     @PostMapping("/admin")
-    public ResponseEntity<UserResponse> createAdmin(@RequestBody User user) {
+    // Validate Admin
+    public ResponseEntity<UserResponse> createAdmin(@Valid @RequestBody User user, BindingResult result) {
+        if (result.hasErrors()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(new UserResponse("Failed to save ADMIN: " + result.getAllErrors().get(0).getDefaultMessage(), null));
+        }
+        // ตวจสอบ email ช้ำกันหรือไม่ ถ้าช้ำคือไม่สามาตบันทืกลงไปได้
+        if (userService.isEmailExists(user.getEmail())) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(new UserResponse("Failed to save ADMIN: Email already exists", null));
+        }
+
         try {
-            user.setRole("ADMIN"); // กำหนดค่า role เป็น "ADMIN" สำหรับผู้ใช้ที่สร้างใหม่
+            user.setRoleId(Role.ADMIN.getRoleId()); // กำหนดค่า role เป็น Role.ADMIN สำหรับผู้ใช้ที่สร้างใหม่
             User savedUser = userService.createUser(user);
+            // กำหนดกานแสดงให้ส่งค่ากับไปหา client
+            UserDto userDto = new UserDto();
+            userDto.setUserId(savedUser.getUserId());
+            userDto.setFirstName(savedUser.getFirstName());
+            userDto.setLastName(savedUser.getLastName());
+            userDto.setPhone(savedUser.getPhone());
+            userDto.setEmail(savedUser.getEmail());
+            userDto.setPassword(savedUser.getPassword());
+            userDto.setRoleId(savedUser.getRoleId());
             return ResponseEntity.status(HttpStatus.CREATED)
-                    .body(new UserResponse("ADMIN saved successfully", savedUser));
+                    .body(new UserResponse("ADMIN saved successfully", userDto));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(new UserResponse("Failed to save ADMIN: " + e.getMessage(), null));
@@ -62,12 +82,32 @@ public class UserController {
     }
 
     @PostMapping("/employee")
-    public ResponseEntity<UserResponse> createEmployee(@RequestBody User user) {
+    // Validate Employee
+    public ResponseEntity<UserResponse> createEmployee(@Valid @RequestBody User user, BindingResult result) {
+        if (result.hasErrors()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(new UserResponse("Failed to save EMPLOYEE: " + result.getAllErrors().get(0).getDefaultMessage(), null));
+        }
+        // ตวจสอบ email ช้ำกันหรือไม่ ถ้าช้ำคือไม่สามาตบันทืกลงไปได้
+        if (userService.isEmailExists(user.getEmail())) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(new UserResponse("Failed to save ADMIN: Email already exists", null));
+        }
+
         try {
-            user.setRole("EMPLOYEE"); // กำหนดค่า role เป็น "EMPLOYEE" สำหรับผู้ใช้ที่สร้างใหม่
+            user.setRoleId(Role.EMPLOYEE.getRoleId()); // กำหนดค่า role เป็น Role.EMPLOYEE สำหรับผู้ใช้ที่สร้างใหม่
             User savedUser = userService.createUser(user);
+            // กำหนดกานแสดงให้ส่งค่ากับไปหา client
+            UserDto userDto = new UserDto();
+            userDto.setUserId(savedUser.getUserId());
+            userDto.setFirstName(savedUser.getFirstName());
+            userDto.setLastName(savedUser.getLastName());
+            userDto.setPhone(savedUser.getPhone());
+            userDto.setEmail(savedUser.getEmail());
+            userDto.setPassword(savedUser.getPassword());
+            userDto.setRoleId(savedUser.getRoleId());
             return ResponseEntity.status(HttpStatus.CREATED)
-                    .body(new UserResponse("EMPLOYEE saved successfully", savedUser));
+                    .body(new UserResponse("EMPLOYEE saved successfully", userDto));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(new UserResponse("Failed to save EMPLOYEE: " + e.getMessage(), null));
@@ -75,12 +115,33 @@ public class UserController {
     }
 
     @PostMapping("/customer")
-    public ResponseEntity<UserResponse> createCustomer(@RequestBody User user) {
+    // Validate Customer
+    public ResponseEntity<UserResponse> createCustomer(@Valid @RequestBody User user, BindingResult result) {
+        if (result.hasErrors()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(new UserResponse("Failed to save CUSTOMER: " + result.getAllErrors().get(0).getDefaultMessage(), null));
+        }
+        // ตวจสอบ email ช้ำกันหรือไม่ ถ้าช้ำคือไม่สามาตบันทืกลงไปได้
+        if (userService.isEmailExists(user.getEmail())) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(new UserResponse("Failed to save ADMIN: Email already exists", null));
+        }
+
         try {
-            user.setRole("CUSTOMER"); // กำหนดค่า role เป็น "CUSTOMER" สำหรับผู้ใช้ที่สร้างใหม่
+            user.setRoleId(Role.CUSTOMER.getRoleId()); // กำหนดค่า role เป็น Role.CUSTOMER สำหรับผู้ใช้ที่สร้างใหม่
             User savedUser = userService.createUser(user);
+// กำหนดกานแสดงให้ส่งค่ากับไปหา client
+            UserDto userDto = new UserDto();
+            userDto.setUserId(savedUser.getUserId());
+            userDto.setFirstName(savedUser.getFirstName());
+            userDto.setLastName(savedUser.getLastName());
+            userDto.setPhone(savedUser.getPhone());
+            userDto.setEmail(savedUser.getEmail());
+            userDto.setPassword(savedUser.getPassword());
+            userDto.setRoleId(savedUser.getRoleId());
+
             return ResponseEntity.status(HttpStatus.CREATED)
-                    .body(new UserResponse("CUSTOMER saved successfully", savedUser));
+                    .body(new UserResponse("CUSTOMER saved successfully", userDto));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(new UserResponse("Failed to save CUSTOMER: " + e.getMessage(), null));

@@ -24,7 +24,13 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
 
+    public boolean isEmailExists(String email) {
+        return userRepository.findByEmail(email) != null;
+    }
 
+    public void saveUser(User user) {
+        userRepository.save(user);
+    }
     public List<User> getAllUsers() {
         return userRepository.findAll();
     }
@@ -42,7 +48,7 @@ public class UserService {
     public User updateUser(Long id, User user) {
         User existingUser = userRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid user ID: " + id));
-        existingUser.setUsername(user.getUsername());
+        existingUser.setFirstName(user.getFirstName());
         existingUser.setEmail(user.getEmail());
         return userRepository.save(existingUser);
     }

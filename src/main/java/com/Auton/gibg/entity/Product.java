@@ -16,6 +16,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class Product {
 
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "pro_id")
@@ -32,8 +33,8 @@ public class Product {
     @JsonFormat(shape = JsonFormat.Shape.NUMBER)
     private Double price;
 
-//    @Column(name = "amount")
-//    private Integer amount;
+    @Column(name = "quantity")
+    private Integer quantity;
 
     @Column(name = "image_pro")
     private String imagePro;
@@ -42,22 +43,16 @@ public class Product {
     private String imagePreview;
 
     @Column(name = "shope_id")
-    private Long shope_id;
+    private Long shopId;
 
     @Column(name = "user_id")
     private Long user_id;
 
     @Column(name = "hashtag_id")
-    private Long hashtagId;
+    private Long hashtag_id;
 
     @Column(name = "createat")
-    private LocalDateTime createat;
-
-//    @Column(name = "role_name")
-//    private String role_name;
-
-    @Transient
-    private String additionalField;
+    private LocalDateTime createAt;
 
     // getters and setters
 }
